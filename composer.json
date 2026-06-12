@@ -1,0 +1,10 @@
+{
+    "name": "sf-express-locker/pdf-parser",
+    "description": "PDF parser dependency for SF Express Locker plugin",
+    "require": {
+        "smalot/pdfparser": "^2.0"
+    },
+    "config": {
+        "vendor-dir": "vendor"
+    }
+}
