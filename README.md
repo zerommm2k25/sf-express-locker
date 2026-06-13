@@ -5,9 +5,10 @@ HK-only WooCommerce plugin adding SF Express Locker self-pickup selection at che
 ## Features
 
 - **Cascading locker selector** — choose region → district → locker from SF Express's official locker network
+- **AJAX keyword search** — search lockers by code or address directly
 - **Weight-based shipping** — first 1kg base fee, per-kg rate for additional weight (不足1kg當1kg)
 - **Flat rate matching** — "寄到指定地址" flat rate auto-adjusted to same weight-based pricing
-- **Automatic daily sync** — locker data downloaded from SF Express official PDF every 24h
+- **Automatic daily sync** — locker data downloaded from SF Express official PDF at midnight via cron + admin visit fallback
 - **Admin management** — import/export locker data, manual PDF upload, view locker list with pagination
 - **Order integration** — locker code and address saved to order meta, displayed in admin and emails
 - **Zero-config activation** — auto-creates DB table, imports bundled data, sets HK country/ship-to, creates HK zone
@@ -38,11 +39,20 @@ HK-only WooCommerce plugin adding SF Express Locker self-pickup selection at che
 
 ## Auto-Import
 
-Locker data syncs from SF Express's official PDF once daily — triggered both by WordPress cron (`sf_locker_daily_maintenance`) and on admin page visits when more than 24h have passed since last sync.
-
-Manual import is always available under **匯入資料** tab.
+Locker data syncs from SF Express's official PDF:
+- **WordPress cron** fires daily at **00:00** (midnight)
+- **Admin page visits** also trigger a sync immediately for on-demand updates
+- Manual import always available under **匯入資料** tab
 
 ## Changelog
+
+### 1.4.0
+- AJAX keyword search input on checkout (search by code or address)
+- Daily cron rescheduled to midnight (00:00)
+- Admin auto-import now triggers on every admin visit (no 24h gate)
+- Loading spinner + dim effect on "從順豐官網更新資料" button
+- CSS refinements: hover padding, larger result text, white search input background
+- Version bump
 
 ### 1.3.0
 - Auto-download locker data from SF Express on admin login (once daily)
