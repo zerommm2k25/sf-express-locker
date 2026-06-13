@@ -28,6 +28,11 @@ $region_labels = array(
                 </select>
             </div>
 
+            <div class="sf-locker-search-box">
+                <input type="text" id="sf-locker-search-input" class="sf-locker-search-input"
+                       placeholder="輸入智能櫃編號或地址搜尋..." autocomplete="off">
+            </div>
+
             <div class="sf-locker-loader">載入中...</div>
 
             <ul id="sf-locker-results"></ul>
@@ -40,7 +45,7 @@ $region_labels = array(
                         <?php echo $selected_locker ? esc_html( $selected_locker['district'] . ' ' . $selected_locker['address_zh'] ) : ''; ?>
                     </span>
                 </div>
-                <span class="sf-locker-change" onclick="jQuery('#sf-locker-selected').hide();jQuery('#sf-locker-region').val('').trigger('change');jQuery('#sf-locker-results').show();jQuery('#sf-locker-region').focus();">
+                <span class="sf-locker-change" onclick="jQuery('#sf-locker-selected').hide();jQuery('#sf-locker-search-input').val('');jQuery('#sf-locker-region').val('').trigger('change');jQuery('#sf-locker-results').empty().hide();jQuery('#sf-locker-region').focus();">
                     更換智能櫃
                 </span>
             </div>

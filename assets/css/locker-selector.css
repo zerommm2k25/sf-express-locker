@@ -44,10 +44,30 @@ tr.sf-locker-selector td {
     display: none;
 }
 
+
+
+.sf-locker-search-input {
+    width: 100%;
+    margin: 0 0 5px !important;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    font-size: 14px;
+    box-sizing: border-box;
+    outline: none;
+    transition: border-color 0.15s;
+    background: #fff !important;
+}
+
+.sf-locker-search-input:focus {
+    border-color: #007cba;
+    background: #fff !important;
+}
+
 #sf-locker-results {
     list-style: none;
     margin: 0;
-    padding: 0;
+    padding: 10px;
     max-height: 300px;
     overflow-y: auto;
     border: 1px solid #e0e0e0;
@@ -56,7 +76,7 @@ tr.sf-locker-selector td {
 }
 
 .sf-locker-item {
-    padding: 10px 12px;
+    padding: 10px 0;
     cursor: pointer;
     border-bottom: 1px solid #f0f0f0;
     display: flex;
@@ -80,12 +100,13 @@ tr.sf-locker-selector td {
 
 .sf-locker-name {
     flex: 1;
-    font-size: 13px;
+    font-size: 15px;
     line-height: 1.4;
+    margin-right: 10px;
 }
 
 .sf-locker-code {
-    font-size: 11px;
+    font-size: 15px;
     color: #999;
     font-family: monospace;
     margin-left: 8px;

@@ -13,6 +13,7 @@
             this.$container = $('.sf-locker-selector-inner');
             this.$regionSelect = $('#sf-locker-region');
             this.$districtSelect = $('#sf-locker-district');
+            this.$searchInput = $('#sf-locker-search-input');
             this.$resultsList = $('#sf-locker-results');
             this.$selectedDisplay = $('#sf-locker-selected');
             this.$hiddenInput = $('#sf_locker_code');
@@ -21,6 +22,7 @@
             this.$shippingFields = $('.woocommerce-shipping-fields');
             this.$loader = $('.sf-locker-loader');
             this.$nonceField = $('#sf_locker_nonce');
+            this.searchTimer = null;
         },
 
         bindEvents: function() {
@@ -32,6 +34,13 @@
 
             this.$districtSelect.on('change', function() {
                 self.searchLockers();
+            });
+
+            this.$searchInput.on('input', function() {
+                clearTimeout(self.searchTimer);
+                self.searchTimer = setTimeout(function() {
+                    self.searchLockers();
+                }, 300);
             });
 
             this.$resultsList.on('click', '.sf-locker-item', function() {
@@ -108,11 +117,13 @@
 
         searchLockers: function() {
             var self = this;
+            var keyword = this.$searchInput.val();
             var district = this.$districtSelect.val();
+            var region = this.$regionSelect.val();
 
             this.$resultsList.hide();
 
-            if (!district) {
+            if (!keyword && !district) {
                 return;
             }
 
@@ -122,7 +133,9 @@
                 url: sfLockerData.ajax_url.replace('%%endpoint%%', 'sf_search_lockers'),
                 type: 'POST',
                 data: {
+                    keyword: keyword,
                     district: district,
+                    region: region,
                     security: this.getNonce()
                 },
                 success: function(response) {
@@ -176,6 +189,7 @@
             this.$selectedAddress.text(district + ' ' + address);
             this.$selectedDisplay.show();
 
+            this.$searchInput.val('');
             this.$regionSelect.val('');
             this.$districtSelect.prop('disabled', true).html('<option value="">選擇地區</option>');
             this.$resultsList.hide();

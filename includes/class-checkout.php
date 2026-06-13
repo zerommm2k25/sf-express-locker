@@ -165,9 +165,11 @@ class SF_Locker_Checkout {
     public static function ajax_search_lockers() {
         check_ajax_referer( 'sf-locker-search', 'security' );
 
+        $keyword  = isset( $_POST['keyword'] ) ? sanitize_text_field( $_POST['keyword'] ) : '';
         $district = isset( $_POST['district'] ) ? sanitize_text_field( $_POST['district'] ) : '';
+        $region   = isset( $_POST['region'] ) ? sanitize_text_field( $_POST['region'] ) : '';
 
-        $lockers = SF_Locker_Data::search( '', $district, 200 );
+        $lockers = SF_Locker_Data::search( $keyword, $district, 200, $region );
 
         $html = '';
         foreach ( $lockers as $locker ) {

@@ -3,7 +3,7 @@
  * Plugin Name: SF Express Locker for WooCommerce
  * Plugin URI: https://localhost/gikgoods
  * Description: 在 WooCommerce 結帳時讓客戶選擇順豐智能櫃地址自取
- * Version: 1.3.0
+ * Version: 1.4.0
  * Author: Your Name
  * Requires at least: 6.2
  * Requires PHP: 7.4
@@ -15,7 +15,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'SF_LOCKER_VERSION', '1.3.0' );
+define( 'SF_LOCKER_VERSION', '1.4.0' );
 define( 'SF_LOCKER_FILE', __FILE__ );
 define( 'SF_LOCKER_PATH', plugin_dir_path( __FILE__ ) );
 define( 'SF_LOCKER_URL', plugin_dir_url( __FILE__ ) );
@@ -215,9 +215,11 @@ final class SF_Locker_Plugin {
             return;
         }
 
-        $last = get_option( 'sf_locker_last_auto_import', 0 );
-        if ( is_numeric( $last ) && ( time() - (int) $last ) < DAY_IN_SECONDS ) {
-            return;
+        $scheduled = wp_next_scheduled( 'sf_locker_daily_maintenance' );
+        $midnight  = strtotime( 'tomorrow 00:00:00' );
+        if ( $scheduled && $scheduled !== $midnight ) {
+            wp_clear_scheduled_hook( 'sf_locker_daily_maintenance' );
+            wp_schedule_event( $midnight, 'daily', 'sf_locker_daily_maintenance' );
         }
 
         $this->run_auto_import();
@@ -259,7 +261,8 @@ function sf_locker_activate() {
     SF_Locker_Data::import_bundled_data();
 
     if ( ! wp_next_scheduled( 'sf_locker_daily_maintenance' ) ) {
-        wp_schedule_event( time(), 'daily', 'sf_locker_daily_maintenance' );
+        $midnight = strtotime( 'tomorrow 00:00:00' );
+        wp_schedule_event( $midnight, 'daily', 'sf_locker_daily_maintenance' );
     }
 
     add_option( 'sf_locker_setup_pending', 1 );

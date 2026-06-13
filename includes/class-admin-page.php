@@ -136,6 +136,17 @@ class SF_Locker_Admin_Page {
         $last_updated = get_option( 'sf_locker_last_updated', '' );
         $pdf_url = SF_LOCKER_PDF_URL;
         ?>
+        <style>
+            .sf-fetch-btn.processing {
+                pointer-events: none;
+                opacity: 0.6;
+            }
+            .sf-fetch-btn .spinner {
+                float: none;
+                margin: 0 6px 0 0;
+                visibility: visible;
+            }
+        </style>
         <div class="card" style="max-width: 600px; margin-top: 16px;">
             <h2>匯入智能櫃資料</h2>
 
@@ -171,15 +182,30 @@ class SF_Locker_Admin_Page {
             <?php endif; ?>
 
             <?php if ( $pdf_available ) : ?>
-                <form method="post" action="<?php echo admin_url( 'admin-post.php' ); ?>" style="margin-bottom: 20px;">
+                <form method="post" action="<?php echo admin_url( 'admin-post.php' ); ?>" style="margin-bottom: 20px;" class="sf-fetch-form">
                     <input type="hidden" name="action" value="sf_fetch_pdf">
                     <?php wp_nonce_field( 'sf_fetch_pdf' ); ?>
                     <p>
-                        <button type="submit" class="button button-primary" onclick="return confirm('將會從順豐官網下載最新智能櫃清單並更新資料，確定繼續？');">
+                        <button type="submit" class="button button-primary sf-fetch-btn" onclick="return confirm('將會從順豐官網下載最新智能櫃清單並更新資料，確定繼續？');">
                             從順豐官網更新資料
                         </button>
                     </p>
                 </form>
+                <script>
+                (function() {
+                    var form = document.querySelector('.sf-fetch-form');
+                    if (form) {
+                        form.addEventListener('submit', function() {
+                            var btn = form.querySelector('.sf-fetch-btn');
+                            if (btn) {
+                                btn.classList.add('processing');
+                                btn.disabled = true;
+                                btn.innerHTML = '<span class="spinner"></span>更新中...';
+                            }
+                        });
+                    }
+                })();
+                </script>
             <?php endif; ?>
 
             <hr>
